@@ -1,0 +1,23 @@
+# Ruby tutorial
+* The prompt. Typing code into the prompt gives you an answer.
+* Numbers and strings are Ruby's math and text objects.
+* Methods. You've used English-language methods like reverse and symbolic methods like * (the multiplication method.) Methods are actions!
+Really cool thing about Ruby is that you can always convert between different types using Ruby's "to" methods.
+* 		to_s converts values to strings.
+* 		to_i converts values to integers (numbers.)
+* 		to_a converts values to arrays.
+You built a list. Then you sorted the list. And as you've seen, the ticket variable is now changed.
+Now, let's look at how your second level went down:
+* 		Errors. If you try to reverse a number or do anything fishy, Ruby will skip the prompt and tell you to straighten up.
+* 		Arrays are lists of stored information.
+* 		Variables are a place to save stuff you might need again, as well as give that stuff a name. You used the equals sign to do this, in a process called assignment. Like: ticket = [14, 37, 18].
+In all, there are just eight levels in this course. You are already two-eighths of the way to the end! This is simple stuff, don't you think? More good stuff up ahead.
+Let's change directions for a moment. I've stuffed a bit of poetry for you in a certain variable. Take a look, by typing print poem
+Good show, my friend! The join method took that list of reversed lines and put them together into a single string. (Sure, you could have also just used to_s.)
+Time for a quick review.
+* 		Exclamation Points. Methods may have exclamation points in their name, which just means to impact the current data, rather than making a copy. No big deal.
+* 		Square Brackets. With these, you can target and find things. You can even replace them if necessary.
+* 		Chaining methods lets you get a lot more done in a single command. Break up a poem, reverse it, reassemble it: poem.lines.to_a.reverse.join.
+Guess what? Methods can also have question marks. Try: poem.include? "my hand" to check it out.
+At this point, you may want to tinker with the poem a bit more. A complete list of all the String methods is here. Go ahead and try a few (such as poem.downcase orpoem.delete.)
+And now on to something new. When you're ready to move on, type: books = {}
