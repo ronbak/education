@@ -3,7 +3,7 @@
 
 ### Типичные макеты
 <div>
-<img src="1col.png" alt="Drawing" style="width: 150px;"/>
+<img src="1col.png" alt="Drawing" styl e="width: 150px;"/>
 <img src="2col.png" alt="Drawing" style="width: 150px;"/>
 <img src="3col.png" alt="Drawing" style="width: 150px;"/>
 </div>
