@@ -5,7 +5,7 @@
 - git checkout -b dev // make a branch "dev"
 - git checkout master // move to master
 - git checkout // move to the last state
-
+- git pull --rebase upstream master //обновление форка из оригинала
 /_ Set up Git Configuration _/
 
 git config --global user.email "you@yourdomain.com"
