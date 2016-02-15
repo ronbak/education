@@ -1,5 +1,5 @@
 # 4 TIPS FOR WORKING WITH TRELLO
-![](logo.png)
+<img src="logo.png" style="width: 200px;"/>
 ## 1. One project = one board, no one MONSTER BOARD!
 ## 2. To Do, Doing and Done!
 ## 3. Label your labels.
