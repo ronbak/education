@@ -15,6 +15,11 @@
 (defun inverse (s) (if (equal s nil) nil (cons (lastitem s)) (inverse (dell s))))
 (cons 1 '(2 3)) = (1 2 3)
 
+(defun reverser (l)
+((if (eq l nil) nil
+     (append (reverser (cdr l) (car l))))))
+
+(reverser '(a (b c d) e))
 
 (backtrackable)
 Линейный список: список, элементы которого - атомы.
@@ -49,6 +54,102 @@ Lin(nil)=nil
 (SETQ X' (y a))
 (set (car x) 5)
 
+(defun flat (lst)
+  (cond ((null lst) nil)
+        ((atom (car lst)) (cons (car lst) (flat (cdr lst))))
+        (t (append (flat (car lst)) (flat (cdr lst))))))
+
+(flat '(1 2 (((3 4 (5)))) 6))
+
+(defun reverser (l)
+((if (eq l nil) nil
+     (append (reverser (cdr l) (car l))))))
+
+(defun reverser (l) (reverse (flat l)))
+
+(defun reverser (l)
+  (if (null l) nil
+    (append (reverser (cdr l))
+      (list (if (listp (car l)) (reverser (car l)) (car l)))
+    )
+  )
+)
+
+(defun reverser2 (l)
+  (if (null l) nill
+    (if (atom (car l)) (append (reverser2 (cdr l) (car l) ))
+      (reverser2 (car l))
+    )
+  )
+)
+
+
+
+;;; сумма-произведение списка
+(defun sumlist (x) (cond ((null x) 0)
+                         (t (+ (car x) (sumlist (cdr x))))))
+(sumlist '(2 3 4 5))
+
+(defun multilist (x) (cond ((null x) 1)
+                         (t (* (car x) (multilist (cdr x))))))
+(multilist '(2 3 4 5))
+
+(defun sell1(x s)
+(case x
+  ((+) (sumlist s))
+  ((*) (multilist s))
+))
+
+
+
+(defun calc(s v)
+(if (equal s '+) sumlist(v))
+)
+
+(calc '+ '(2 3))
+
+(defun numelem (x)
+(
+  (setq i 0)
+  (do
+    ( (lst x (cdr lst)))
+    ( (equal (cdr lst) nil) i)
+    (+ i 1)
+)))
+
+(setq sum 0)
+
+(do
+( ( i 1 (+ i 1)))
+( (> i 5) sum)
+(setq sum (+ sum i))
+)
+
+(numelem '(2 3 4))
+
+(defun numelem (x)
+(
+  (setq i 0)
+
+))
+
+(numelem '(2 3))
+
+(defun gapply(s v)
+(
+  (do
+  ((i 0 (+ i 1)))
+  (())
+  ()))
+)
+
+(sell1 '* '(2 3))
+(sell1 '+ '(1 2 3 4 5))
+;;;
+
+(reverser '(a (b c d) e))
+(reverser2 '(a (b c d) e))
+
  f:
  если первый эл-т nil
   возвращаем nil
@@ -63,5 +164,4 @@ Lin(nil)=nil
   подсчитать сумму всех чисел атомов
   подсчитать числовые атомы
 
-
-   к\р по структурным спискам в след ср
+к\р по структурным спискам в след ср
