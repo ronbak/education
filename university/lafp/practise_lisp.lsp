@@ -63,5 +63,18 @@ Lin(nil)=nil
   подсчитать сумму всех чисел атомов
   подсчитать числовые атомы
 
+КР3:
+  (DEFUN gapply (q w)
+  (SETQ lst '())
+  (DO ((count (LENGTH w) (- count 1)))
+  ((= count 0) (RETURN lst))
+  (SETQ lst (APPEND lst (LIST (APPLY (CAR q) (CAR w))))) (SETQ w (CDR w)) (SETQ q (CDR q))
+  ))
 
-   к\р по структурным спискам в след ср
+  (gapply '(+ -) '((2 3 4)(2 3 4)))
+
+  (setq sum 0)
+  (do
+  ( ( i 1 (+ i 1)))
+  ( (> i 10) sum)
+  (setq sum (+ sum i)))
