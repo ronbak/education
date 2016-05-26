@@ -43,10 +43,10 @@ CDR
 ----
 Задан список. Найти число элементов
 
-	(DEFUN LISTCOUNT (s) 
-		(IF (EQ s NIL) 
-			0 
-			( + 1 (LISTCOUNT (CDR s))) 
+	(DEFUN LISTCOUNT (s)
+		(IF (EQ s NIL)
+			0
+			( + 1 (LISTCOUNT (CDR s)))
 		)
 	)
 
@@ -55,11 +55,11 @@ CDR
 ----
 Задан числовой список. Найти сумму
 
-	(DEFUN LISTSUM (s) 
-		(IF (EQ s NIL) 
-			0 
-			( + (CAR s) 
-				(LISTSUM (CDR s))) 
+	(DEFUN LISTSUM (s)
+		(IF (EQ s NIL)
+			0
+			( + (CAR s)
+				(LISTSUM (CDR s)))
 		)
 	)
 
@@ -97,7 +97,7 @@ True and false
 
 ( = s t)
 
-Функция эквивалентности EQ подходит и для чисел. 
+Функция эквивалентности EQ подходит и для чисел.
 
 (EQ s t)
 
@@ -140,7 +140,7 @@ x=(cons(s,t)) <=> car(x)=s & cdr(x)=t
 (append s t) - склеивание 2х списков
 
 	(defun app (s s1) (IF (EQ NIL (cdr s)) (cons (car s) s1) (cons (car s) (app (cdr s) s1))))
-	
+
 >(app '(1 2 3) '(4 5))
 
 Примечание: LISP воспринимает t как true
@@ -162,14 +162,14 @@ x=(cons(s,t)) <=> car(x)=s & cdr(x)=t
 Дан числовой список. Вернуть его, убрав четные числа.
 
 
-	(DEFUN dev (s) 
-		(IF (EQ s NIL) 
-			NIL 
-			(IF (= 0 (MOD (CAR S) 2)) 
-				(dev (cdr s)) 
-				(cons (car s) (dev (cdr s)) )  
-			)   
-		) 
+	(DEFUN dev (s)
+		(IF (EQ s NIL)
+			NIL
+			(IF (= 0 (MOD (CAR S) 2))
+				(dev (cdr s))
+				(cons (car s) (dev (cdr s)) )
+			)
+		)
 	)
 
 16.03 Задачи на структурные списки
@@ -181,17 +181,17 @@ x=(cons(s,t)) <=> car(x)=s & cdr(x)=t
 
 (counte s)
 
-	(DEFUN counte (s) 
-		(IF (EQ s NIL) 
-			0 
-			(IF (atom (car s) ) 
-				(+ 1 (counte (cdr s)) ) 
+	(DEFUN counte (s)
+		(IF (EQ s NIL)
+			0
+			(IF (atom (car s) )
+				(+ 1 (counte (cdr s)) )
 				(+ (counte (car s)) (counte (cdr s))  )
-			)  
-		)   
+			)
+		)
 	)
 
->(counte '(1 10 10 10 (10 20))) 
+>(counte '(1 10 10 10 (10 20)))
 
 >6
 
@@ -202,14 +202,14 @@ x=(cons(s,t)) <=> car(x)=s & cdr(x)=t
 
 (sume s)
 
-	(DEFUN sume (s) 
-		(IF (EQ s NIL) 
-			0 
-			(IF (atom (car s) ) 
-				(+ (car s) (sume (cdr s)) ) 
-				(+ (sume (car s)) (sume (cdr s))  )   
-			)  
-		)   
+	(DEFUN sume (s)
+		(IF (EQ s NIL)
+			0
+			(IF (atom (car s) )
+				(+ (car s) (sume (cdr s)) )
+				(+ (sume (car s)) (sume (cdr s))  )
+			)
+		)
 	)
 
 >(sume '(1 10 (10 20) 10))
@@ -223,20 +223,20 @@ x=(cons(s,t)) <=> car(x)=s & cdr(x)=t
 
 (EXPl s n)
 
-	(DEFUN expl (s n) 
-		(IF (EQ (cdr s) NIL) 
-			(IF (atom (car s) ) 
-				(cons (power (car s) n) NIL) 
+	(DEFUN expl (s n)
+		(IF (EQ (cdr s) NIL)
+			(IF (atom (car s) )
+				(cons (power (car s) n) NIL)
 				(cons (expl (car s) n) NIL)
-			) 
-			(IF (atom (car s)) 
-				(cons (power (car s) n) (expl (cdr s) n) ) 
+			)
+			(IF (atom (car s))
+				(cons (power (car s) n) (expl (cdr s) n) )
 				(cons (expl (car s) n) (expl (cdr s) n))
 			)
 		)
 	)
 
->(expl '(1 3 (3 2)) 2) 
+>(expl '(1 3 (3 2)) 2)
 
 >(1 9 (9 4))
 
@@ -248,24 +248,24 @@ x=(cons(s,t)) <=> car(x)=s & cdr(x)=t
 Добавление в конец списка
 	(DEFUN consl (a s) (if (EQ (cdr s) NIL) (cons a NIL) (append s (cons a NIL)) ) )
 
-	(DEFUN deepreverse (s) (IF (EQ (cdr s) NIL))    
-		(IF (atom (car s)) 
-			(cons (car s) NIL) 
+	(DEFUN deepreverse (s) (IF (EQ (cdr s) NIL))
+		(IF (atom (car s))
+			(cons (car s) NIL)
 			(deepreverse (car s))
 		)
-		(IF (atom (car s)) 
-			(consl (car s) (deepreverse (cdr s)) ) 
-			(append (deepreverse (cdr s)) (cons (deepreverse (car s)) NIL )) 
-		) 
+		(IF (atom (car s))
+			(consl (car s) (deepreverse (cdr s)) )
+			(append (deepreverse (cdr s)) (cons (deepreverse (car s)) NIL ))
+		)
 	)
 
 6.04 Практика
-==== 
+====
 Задача 1
 ----
-Подобие структуры двух списков 
+Подобие структуры двух списков
 
-	(DEFUN eq_structure (s1 s2) (IF (EQ s1 NIL) (IF (EQ s2 NIL) T NIL ) (IF (EQ s2 NIL)  NIL  (AND  (IF (EQ (atom (car s1)) (atom (car s2))) (IF (atom (car s1)) T (eq_structure (car s1) (car s2))) NIL) (eq_structure (cdr s1) (cdr s2))  ) ) )) 
+	(DEFUN eq_structure (s1 s2) (IF (EQ s1 NIL) (IF (EQ s2 NIL) T NIL ) (IF (EQ s2 NIL)  NIL  (AND  (IF (EQ (atom (car s1)) (atom (car s2))) (IF (atom (car s1)) T (eq_structure (car s1) (car s2))) NIL) (eq_structure (cdr s1) (cdr s2))  ) ) ))
 
 Если оба атомы или оба списки, T в список результатов. Потом AND над этим списком</br>
 Проверять, когда они оба не атомы</br>
@@ -288,9 +288,9 @@ x=(cons(s,t)) <=> car(x)=s & cdr(x)=t
 
 (если не включен, 0, иначе ..)
 
-	(DEFUN includings_number (s1 s2) 
-		(IF (member_list s1 s2) 
-			(+ 
+	(DEFUN includings_number (s1 s2)
+		(IF (member_list s1 s2)
+			(+
 				(IF (atom (car s2))
 					0
 					(IF (EQUAL (car s2) s1)
@@ -298,13 +298,13 @@ x=(cons(s,t)) <=> car(x)=s & cdr(x)=t
 						(includings_number s1 (car s2))
 					)
 				)
-				(includings_number s1 (cdr s2)) 
+				(includings_number s1 (cdr s2))
 			)
 			0
 		)
 	)
 
-	(DEFUN includings_number (s1 s2)  (IF (member_list s1 s2)  (+  (IF (atom (car s2)) 0 (IF (EQUAL (car s2) s1) 1 (includings_number s1 (car s2)) ) ) (includings_number s1 (cdr s2))  ) 0 ) ) 
+	(DEFUN includings_number (s1 s2)  (IF (member_list s1 s2)  (+  (IF (atom (car s2)) 0 (IF (EQUAL (car s2) s1) 1 (includings_number s1 (car s2)) ) ) (includings_number s1 (cdr s2))  ) 0 ) )
 
 13.04
 ====
@@ -417,12 +417,12 @@ LOOP</br>
 
 	(DEFUN gapply (s v) (LET ((reslist (list NIL))) (LOOP (cond ((EQUAL NIL s) (return (cdr reslist)))) (setq reslist (append reslist (list (apply (eval (car s)) (car v))))) (setq s (cdr s)) (setq v (cdr v)))))
 
-	(DEFUN gapply (s v) 
-		(LET ((reslist (list NIL))) 
-			(LOOP 
-				(cond ((EQUAL NIL s) (return (cdr reslist)))) 
-				(setq reslist (append reslist (list (apply (eval (car s)) (car v))))) 
-				(setq s (cdr s)) 
+	(DEFUN gapply (s v)
+		(LET ((reslist (list NIL)))
+			(LOOP
+				(cond ((EQUAL NIL s) (return (cdr reslist))))
+				(setq reslist (append reslist (list (apply (eval (car s)) (car v)))))
+				(setq s (cdr s))
 				(setq v (cdr v))
 			)
 		)
@@ -439,3 +439,84 @@ LOOP</br>
 
 >(total '((1 2) (3 4)))
 
+
+(set 'list '(1 2 3 4 5 6 7)) ; задание списка
+
+(if (= (mod 4 2) 0) 'true 'false) ; проверка на четность
+
+(defun fact (n) (if (= n 0) 1 (* n (fact (- n 1))))) ; вычисление факториала числа
+(defun gcd (m n) (if (= n 0) m (gcd n (mod m n)))) ; нахождение наибольшего общего делителя двух целых чисел
+(defun pow (m n) (if (= n 0) 1 (* m (pow m (- n 1))))) ; возведение m в степень n
+(defun count (s) (if (eq s nil) 0 (+ 1 (count (cdr s)))))
+(defun sum (s) (if (eq s nil) 0 (+ (car s) (sum (cdr s)))))
+(defun max1 (x) (IF (equal x nil) 0 (max (car x) (max1 (cdr x)))))
+(DEFUN LASTM (X) (IF (EQUAL (CDR X) NIL) X (LASTM (CDR X))))
+(defun dell (s) (if (equal (cdr s) nil) nil (cons (car s) (dell (cdr s)))))
+(defun lastitem (s) (if (equal (cdr s) nil) (car s) (lastitem (cdr s))))
+(defun append (s r) (cons (car s) r))
+(defun inverse (s) (if (equal s nil) nil (cons (lastitem s)) (inverse (dell s))))
+(cons 1 '(2 3)) = (1 2 3)
+
+
+(backtrackable)
+Линейный список: список, элементы которого - атомы.
+Линейный: (a b c);
+Структурный: ((a b) c);
+; cond
+Задача линеаризации дерева:
+Снести все атомарные элементы на один уровень. Любая древовидная структура может быть представлена списком
+Из ( (a b) c (e f)) получить (a b c e f)
+Блок схема: ( defun lin (s) )
+If (s=nil)+ nil
+If (atom(car(s))) + cons(car(s)),lin(cdr(s)) - append(lin(car(s)), lin(cdr(s))
+
+Lin(s)=append(lin('(a b)),lin('(c d)))=append('(a b), (c d))= (a b c d)
+
+Lin ('(c d)) = cons('c,lin((d))
+Lin((d))=cons (d, lin(nil))=cons(d,nil)
+Lun(nil)=nik
+Lin('(a b))=cons('a,lin('(b))=(a b)
+Lin('(b))=cons('b, lin(nil))=(b)
+Lin(nil)=nil
+
+Функции обработки списков/
+1) ветвление
+(Cond (условие, действие) (условие, действие) (..,..))
+Пример: (cond (e q x y) 'ok (t 'fail))
+(If b p q) можно изобразить оператором cond((b p) (t q))
+2)присваивания
+(Setq ( var) (expr))
+(Set ( (expr) (expr))
+((setq x '(a b)))
+(SETQ X' (y a))
+(set (car x) 5)
+
+ f:
+ если первый эл-т nil
+  возвращаем nil
+  если остаток от деления первого эл-та на 2 равен 0
+    возвращаем f(список без первого эл-та)
+    возвращаем конкатенацию первый эл-т списка на f(остаток списка)
+КР1:
+(defun dev (s) (if (equal s nil) nil (
+  if (equal (mod (car s) 2) 0) (dev (cdr s)) (cons (car s) (dev (cdr s))))))
+
+  подсчитать количество атомов
+  подсчитать сумму всех чисел атомов
+  подсчитать числовые атомы
+
+КР3:
+  (DEFUN gapply (q w)
+  (SETQ lst '())
+  (DO ((count (LENGTH w) (- count 1)))
+  ((= count 0) (RETURN lst))
+  (SETQ lst (APPEND lst (LIST (APPLY (CAR q) (CAR w))))) (SETQ w (CDR w)) (SETQ q (CDR q))
+  ))
+
+  (gapply '(+ -) '((2 3 4)(2 3 4)))
+
+  (setq sum 0)
+  (do
+  ( ( i 1 (+ i 1)))
+  ( (> i 10) sum)
+  (setq sum (+ sum i)))
