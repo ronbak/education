@@ -54,15 +54,15 @@ CREATE TABLE Persons (
 	id SERIAL PRIMARY KEY,
 	first_name VARCHAR NOT NULL,
 	last_name VARCHAR NOT NULL,
-	birthday DATE NOT NULL,
+	birthday DATETIME NOT NULL,
 	gender GENDER NOT NULL
 );
 
 CREATE INDEX Person_id ON Persons(id);
 
 INSERT INTO Persons (first_name, last_name, birthday, gender) 
-VALUES ('Drake', 'Graham', '24-10-1986', 'М'), ('Вася', 'Вакуленко', ' 20-04-1980 ', 'М'), 
-('John', 'Lennon', '9-10-1940', 'М'), ('Ella', 'Lani', '7-11-1996', 'Ж');
+VALUES ('Drake', 'Graham', '10-24-1986', 'М'), ('Вася', 'Вакуленко', ' 04-20-1980 ', 'М'), 
+('John', 'Lennon', '10-9-1940', 'М'), ('Ella', 'Lani', '7-11-1996', 'Ж');
 
 CREATE TABLE Artists ( 
 	id SERIAL PRIMARY KEY,
@@ -123,13 +123,13 @@ CREATE TABLE Albums (
 
 INSERT INTO Albums (artist_id, group_id, genre_id, title, year, number_tracks) 
 VALUES 
-	(1, NULL, 1, 'If You’re Reading This It’s Too Late', '13-2-2015', DEFAULT), 
-	(2, NULL, 1, 'Баста 4', '14-5-2013', 17), 
+	(1, NULL, 1, 'If You’re Reading This It’s Too Late', '2-13-2015', DEFAULT), 
+	(2, NULL, 1, 'Баста 4', '5-14-2013', 17), 
 	(NULL, 1, 5, 'Imagine', '9-9-1971', 10), 
-	(4, NULL, 2, 'Pure Heroine', '27-9-2013', 15);
+	(4, NULL, 2, 'Pure Heroine', '9-27-2013', 15);
 
 INSERT INTO Albums (artist_id, group_id, genre_id, title, year, number_tracks) 
-VALUES (1, 1, 1, 'If You’re Reading This It’s Too Late', '13-2-2015', DEFAULT);
+VALUES (1, 1, 1, 'If You’re Reading This It’s Too Late', '2-13-2015', DEFAULT);
 
 CREATE TABLE Songs (
 	id SERIAL PRIMARY KEY,
@@ -152,17 +152,17 @@ INSERT INTO Songs (artist_id, group_id, album_id, genre_id, title, duration, tra
 INSERT INTO Songs (artist_id, album_id, genre_id, title, duration, track_no) VALUES (1, 1, 1, 'Over', 188, 3);
 
 CREATE VIEW Artists_persons AS
-	SELECT g.name AS genre, c.name AS country, p.first_name, p.last_name, p.birthday, p.gender
+	SELECT c.name AS country, p.first_name, p.last_name, p.birthday, p.gender, a.pseudonym
 	FROM Artists a 
-	INNER JOIN Genres g ON (g.id = a.genre_id)
+	-- INNER JOIN Genres g ON (g.id = a.genre_id)
 	INNER JOIN Countries c ON (c.id = a.country_id)
-	INNER JOIN Persons p ON (p.artist_id = a.id);
+	INNER JOIN Persons p ON (p.id = a.person_id);
 
 CREATE VIEW Artists_albums AS
-	SELECT al.title, al.year, CONCAT(p.first_name, ' ', p.last_name) AS artist
+	SELECT al.title, al.year, CONCAT(p.first_name, ' ', p.last_name) AS artist, a.pseudonym
 	FROM Artists a
 	INNER JOIN Albums al ON (al.artist_id = a.id)
-	INNER JOIN Persons p ON (p.artist_id = a.id);
+	INNER JOIN Persons p ON (p.id = a.person_id);
 
 CREATE OR REPLACE FUNCTION add_songs()
 RETURNS TRIGGER AS $$
@@ -207,28 +207,19 @@ UPDATE Albums
 	SET number_tracks = 1
 	WHERE id = 1;
 
+INSERT INTO Songs (artist_id, title, duration, album_id, track_no) VALUES (1, 'More!', 180, 1, 4);
 
+------------------------------------------------------------------------------
+------------------------------------------------------------------------------
+------------------------------------------------------------------------------
+------------------------------------------------------------------------------
 
+---------------------------------------SOME SHIT STARTS
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+------------------------------------------------------------------------------
+------------------------------------------------------------------------------
+------------------------------------------------------------------------------
+------------------------------------------------------------------------------
 
 SELECT DISTINCT Artists_genre(genre_id) AS count
 FROM Artists;
@@ -266,7 +257,7 @@ SELECT a.title AS album_title, CONCAT(ap.first_name, ' ', ap.last_name) AS artis
 	WHERE ap.genre = 'Hip-Hop'
 	LIMIT 3 OFFSET 0;
 
-INSERT INTO Songs (title, duration, album_id, track_no) VALUES ('Over', 180, 1, 3);
+INSERT INTO Songs (title, duration, album_id, track_no) VALUES ('Stop it!', 180, 1, 2);
 
 UPDATE Albums 
 	SET number_tracks = 0
@@ -278,3 +269,237 @@ SELECT g.name
 	HAVING COUNT(*) > 1;
 
 DROP TABLE IF EXISTS Artists CASCADE;
+
+------------------------------------------------------------------------------
+------------------------------------------------------------------------------
+------------------------------------------------------------------------------
+------------------------------------------------------------------------------
+
+---------------------------------------SOME SHIT ENDS
+
+------------------------------------------------------------------------------
+------------------------------------------------------------------------------
+------------------------------------------------------------------------------
+------------------------------------------------------------------------------
+
+
+------------------------------------------------------------------------------
+------------------------------------------------------------------------------
+------------------------------------------------------------------------------
+------------------------------------------------------------------------------
+
+---------------------------------------EXPLAIN JSON XML STARTS
+
+------------------------------------------------------------------------------
+------------------------------------------------------------------------------
+------------------------------------------------------------------------------
+------------------------------------------------------------------------------
+
+EXPLAIN SELECT * FROM Albums;
+
+Seq Scan on albums  (cost=0.00..19.70 rows=970 width=56)
+
+EXPLAIN (Analyze) SELECT * FROM Albums;
+
+Seq Scan on albums  (cost=0.00..19.70 rows=970 width=56) (actual time=0.161..0.162 rows=4 loops=1)
+Planning time: 0.348 ms
+Execution time: 0.437 ms
+
+-----------
+-- RANDOM DATA GENERATOR IN DATABASE 'Test'
+-----------
+CREATE DATABASE Test;
+
+SELECT trunc(random()*21); --random() -случайное 0.0 < x < 1.0, trunc() - округление до целого;
+
+CREATE TABLE test_table (
+  id SERIAL PRIMARY KEY,
+  x INT,
+  y INT,
+  s1 VARCHAR,
+  s2 VARCHAR
+);
+
+CREATE OR REPLACE FUNCTION loop(n int) RETURNS VOID AS
+$$ DECLARE
+x int;
+y int;
+e int;
+s varchar;
+s1 varchar;
+s2 varchar;
+array1 varchar[];
+array2 varchar[];
+BEGIN
+    s:='abcdefghijklmnopqrstuv';
+    FOR i IN 1..n LOOP
+        x := trunc(random()*100);
+        y := trunc(random()*100);
+        FOR j IN 1..5 LOOP
+            e := trunc(random()*21+1);
+            SELECT substring(s from e for 1) INTO s1;
+            e := trunc(random()*21+1);
+            SELECT substring(s from e for 1) INTO s2;
+            array1:=array_append(array1, s1);
+            array2:=array_append(array2, s2);
+        END LOOP;
+        s1 := array_to_string(array1,'');
+        s2 := array_to_string(array2,'');
+        INSERT INTO test_table(x, y, s1, s2) VALUES (x, y, s1, s2);
+        array1 := '{NULL}';
+        array2 := '{NULL}';
+        s1 := ' ';
+        s2 := ' ';
+    END LOOP;
+END;
+$$
+LANGUAGE 'plpgsql';
+
+SELECT * FROM loop(2000);
+
+EXPLAIN (ANALYZE) SELECT * FROM test_table;
+
+Seq Scan on test_table  (cost=0.00..33.20 rows=2020 width=24) (actual time=0.019..0.328 rows=2020 loops=1)
+Planning time: 0.100 ms
+Execution time: 0.831 ms
+
+CREATE UNIQUE INDEX INDEX_ID ON test_table (id);
+
+EXPLAIN (ANALYZE) SELECT * FROM test_table;
+
+Seq Scan on test_table  (cost=0.00..33.20 rows=2020 width=24) (actual time=0.008..0.263 rows=2020 loops=1)
+Planning time: 0.532 ms
+Execution time: 0.436 ms
+
+EXPLAIN (ANALYZE) SELECT * FROM test_table
+WHERE id > 150 AND s1 LIKE 'a%';
+
+Seq Scan on test_table  (cost=0.00..43.30 rows=94 width=24) (actual time=0.067..0.693 rows=99 loops=1)
+  Filter: ((id > 150) AND ((s1)::text ~~ 'a%'::text))
+  Rows Removed by Filter: 1921
+Planning time: 0.138 ms
+Execution time: 0.821 ms
+
+EXPLAIN (ANALYZE) SELECT * FROM test_table
+WHERE id < 150 AND s1 LIKE 'a%';
+
+Index Scan using index_id on test_table  (cost=0.28..11.26 rows=8 width=24) (actual time=0.075..0.169 rows=9 loops=1)
+  Index Cond: (id < 150)
+  Filter: ((s1)::text ~~ 'a%'::text)
+  Rows Removed by Filter: 140
+Planning time: 0.282 ms
+Execution time: 0.215 ms
+
+CREATE UNIQUE INDEX STRING1_ID ON test_table (s1);
+
+DROP INDEX STRING1_ID;
+
+CREATE UNIQUE INDEX STRING1_ID ON test_table (s1 text_pattern_ops);
+
+EXPLAIN (ANALYZE) SELECT * FROM test_table
+WHERE id > 150 AND s1 LIKE 'a%';
+
+Bitmap Heap Scan on test_table  (cost=5.51..20.33 rows=94 width=24) (actual time=0.153..0.335 rows=99 loops=1)
+  Filter: ((id > 150) AND ((s1)::text ~~ 'a%'::text))
+  Rows Removed by Filter: 9
+  Heap Blocks: exact=13
+  ->  Bitmap Index Scan on string1_id  (cost=0.00..5.49 rows=121 width=0) (actual time=0.111..0.111 rows=108 loops=1)
+        Index Cond: (((s1)::text ~>=~ 'a'::text) AND ((s1)::text ~<~ 'b'::text))
+Planning time: 0.477 ms
+Execution time: 0.417 ms
+
+-----------
+-- JSON
+-----------
+
+ALTER TABLE test_table ADD COLUMN contacts jsonb;
+
+SELECT * FROM test_table LIMIT 10;
+
+UPDATE test_table SET contacts =  ('{ "email": "example@mail.com",
+                          "telephone": { "home": "5113360", "mobile": "890531" } }') WHERE id = 1;
+UPDATE test_table SET contacts =  ('{ "email": "example2@mail.com", "address": "г.Казань, ул. Челюскина д.48, кв.147",
+                          "telephone": { "home": "5113361", "mobile": "890531" } }') WHERE id = 2;
+UPDATE test_table SET contacts =  ('{ "email": "example2@mail.com", "address": "г.Казань, ул. Челюскина д.52, кв.177",
+                          "telephone": { "home": "5113362", "mobile": "890538" },"skype":"iluzka95" }') WHERE id = 3;
+UPDATE test_table SET contacts =  ('{ "email": "zahar@mail.com", "address": "г.Москва, ул. Подлужная д.2, кв.77",
+                          "telephone": { "mobile": "890538333" },"skype":"zahar95" }') WHERE id = 4;
+UPDATE test_table SET contacts =  ('{ "email": "alina@mail.com", "address": "г.Набережные Челны, ул. Роскольникова д.87, кв.3",
+"telephone": { "home":"633245","mobile": "890538333" },"skype":"alinka995" }') WHERE id = 5;
+UPDATE test_table SET contacts =  ('{ "email": "example3@mail.com", "address": "г.Москва, ул. Васкин д.29, кв.4",
+                          "telephone": { "mobile": "890777333" }}') WHERE id = 6;
+UPDATE test_table SET contacts =  ('{ "email": "example4@mail.com", "address": "г. Казань, ул. Гагарина д.89, кв.34",
+"telephone": { "home":"63333333","mobile": "89012345" } }') WHERE id = 7;
+UPDATE test_table SET contacts =  ('{ "email": "example5@mail.com",
+                          "telephone": { "mobile": "8933333333" },"skype":"lalalala" }') WHERE id = 8;
+UPDATE test_table SET contacts =  ('{ "address": "г.Набережные Челны, ул. Низамиева д.7, кв.54",
+"telephone": { "home":"123456","mobile": "8977777777" },"skype":"myyyy995" }') WHERE id = 9;
+
+SELECT * FROM test_table WHERE id < 11;
+1	26	76	tsjmu	qhuba	{"email": "example@mail.com", "telephone": {"home": "5113360", "mobile": "890531"}}
+2	54	69	aefpf	dtpul	{"email": "example2@mail.com", "address": "г.Казань, ул. Челюскина д.48, кв.147", "telephone": {"home": "5113361", "mobile": "890531"}}
+3	89	90	oapsb	bcgop	{"email": "example2@mail.com", "skype": "iluzka95", "address": "г.Казань, ул. Челюскина д.52, кв.177", "telephone": {"home": "5113362", "mobile": "890538"}}
+4	5	52	pmoif	nocpm	{"email": "zahar@mail.com", "skype": "zahar95", "address": "г.Москва, ул. Подлужная д.2, кв.77", "telephone": {"mobile": "890538333"}}
+5	64	54	hktkj	hmiml	{"email": "alina@mail.com", "skype": "alinka995", "address": "г.Набережные Челны, ул. Роскольникова д.87, кв.3", "telephone": {"home": "633245", "mobile": "890538333"}}
+6	71	21	rtgjm	mtuaa	{"email": "example3@mail.com", "address": "г.Москва, ул. Васкин д.29, кв.4", "telephone": {"mobile": "890777333"}}
+7	72	29	daoua	cjobk	{"email": "example4@mail.com", "address": "г. Казань, ул. Гагарина д.89, кв.34", "telephone": {"home": "63333333", "mobile": "89012345"}}
+8	66	98	tmpms	dhgmk	{"email": "example5@mail.com", "skype": "lalalala", "telephone": {"mobile": "8933333333"}}
+9	52	20	jeahb	uaudh	{"skype": "myyyy995", "address": "г.Набережные Челны, ул. Низамиева д.7, кв.54", "telephone": {"home": "123456", "mobile": "8977777777"}}
+10	62	77	arcbn	nbkao	
+
+--начинается с ключа
+SELECT * FROM test_table WHERE contacts @> '{"email":"example2@mail.com"}';
+2	54	69	aefpf	dtpul	{"email": "example2@mail.com", "address": "г.Казань, ул. Челюскина д.48, кв.147", "telephone": {"home": "5113361", "mobile": "890531"}}
+3	89	90	oapsb	bcgop	{"email": "example2@mail.com", "skype": "iluzka95", "address": "г.Казань, ул. Челюскина д.52, кв.177", "telephone": {"home": "5113362", "mobile": "890538"}}
+
+--начинается и кончается
+SELECT * FROM test_table WHERE contacts <@ '{"email":"example2@mail.com"}';
+
+SELECT * FROM test_table WHERE contacts ?| array['email'];
+
+SELECT * FROM test_table WHERE contacts ?| array['telephone'];
+
+SELECT * FROM test_table WHERE contacts ?& array['email','telephone','address','skype'];
+3	89	90	oapsb	bcgop	{"email": "example2@mail.com", "skype": "iluzka95", "address": "г.Казань, ул. Челюскина д.52, кв.177", "telephone": {"home": "5113362", "mobile": "890538"}}
+4	5	52	pmoif	nocpm	{"email": "zahar@mail.com", "skype": "zahar95", "address": "г.Москва, ул. Подлужная д.2, кв.77", "telephone": {"mobile": "890538333"}}
+5	64	54	hktkj	hmiml	{"email": "alina@mail.com", "skype": "alinka995", "address": "г.Набережные Челны, ул. Роскольникова д.87, кв.3", "telephone": {"home": "633245", "mobile": "890538333"}}
+
+SELECT
+   array_to_json(array_agg(t)) AS test_table
+FROM (
+   SELECT x, s1, contacts FROM test_table ORDER BY id LIMIT 3) t;
+
+[{"x":26,"s1":"tsjmu","contacts":{"email": "example@mail.com", "telephone": {"home": "5113360", "mobile": "890531"}}},{"x":54,"s1":"aefpf","contacts":{"email": "example2@mail.com", "address": "г.Казань, ул. Челюскина д.48, кв.147", "telephone": {"home": "5113361", "mobile": "890531"}}},{"x":89,"s1":"oapsb","contacts":{"email": "example2@mail.com", "skype": "iluzka95", "address": "г.Казань, ул. Челюскина д.52, кв.177", "telephone": {"home": "5113362", "mobile": "890538"}}}]
+
+SELECT
+   row_to_json(t) AS test_table
+FROM (
+   SELECT x, s1, contacts FROM test_table ORDER BY id LIMIT 3) t;
+
+{"x":26,"s1":"tsjmu","contacts":{"email": "example@mail.com", "telephone": {"home": "5113360", "mobile": "890531"}}}
+{"x":54,"s1":"aefpf","contacts":{"email": "example2@mail.com", "address": "г.Казань, ул. Челюскина д.48, кв.147", "telephone": {"home": "5113361", "mobile": "890531"}}}
+{"x":89,"s1":"oapsb","contacts":{"email": "example2@mail.com", "skype": "iluzka95", "address": "г.Казань, ул. Челюскина д.52, кв.177", "telephone": {"home": "5113362", "mobile": "890538"}}}
+
+
+SELECT * FROM jsonb_each(( SELECT contacts FROM test_table WHERE id = 1));
+
+email	"example@mail.com"
+telephone	{"home": "5113360", "mobile": "890531"}
+
+SELECT * FROM jsonb_each_text(( SELECT contacts FROM test_table WHERE id = 1));
+
+SELECT * FROM jsonb_each(( SELECT contacts FROM test_table WHERE id = 1)) t WHERE key = 'email';
+
+SELECT * FROM jsonb_each((SELECT contacts->'telephone' FROM test_table WHERE id = 1));
+
+SELECT table_to_xml('test_table', true, false, '');
+
+SELECT query_to_xml('SELECT * FROM test_table where id < 11 ', true, false, '');
+
+<table xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">  <row>  
+ <id>1</id>   <x>26</x>   <y>76</y>   
+ <s1>tsjmu</s1>   <s2>qhuba</s2>  
+  <contacts>{"email": "example@mail.com", "telephone": {"home": "5113360", "mobile": "890531"}}
+  </contacts> 
+  </row>  
+  </table> 
