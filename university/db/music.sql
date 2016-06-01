@@ -101,7 +101,7 @@ CREATE VIEW Groups_artists AS
 SELECT a.pseudonym, g.group_name 
 	FROM Artists_to_groups ag
 	INNER JOIN Artists a ON (a.id = ag.artist_id)
-	INNER JOIN Groups g ON (g.id = ag.group_id)
+	INNER JOIN Groups g ON (g.id = ag.group_id);
 	WHERE g.group_name LIKE 'Drake';
 
 SELECT * FROM Groups_artists;
@@ -294,10 +294,45 @@ DROP TABLE IF EXISTS Artists CASCADE;
 ------------------------------------------------------------------------------
 ------------------------------------------------------------------------------
 ------------------------------------------------------------------------------
+EXPLAIN (ANALYZE) SELECT al.title, al.year, CONCAT(p.first_name, ' ', p.last_name) AS artist, a.pseudonym
+	FROM Artists a
+	INNER JOIN Albums al ON (al.artist_id = a.id)
+	INNER JOIN Persons p ON (p.id = a.person_id);
+
+Hash Join  (cost=62.97..111.77 rows=970 width=132) (actual time=0.122..0.137 rows=3 loops=1)
+  Hash Cond: (a.person_id = p.id)
+  ->  Hash Join  (cost=35.42..68.46 rows=970 width=72) (actual time=0.047..0.052 rows=3 loops=1)
+        Hash Cond: (al.artist_id = a.id)
+        ->  Seq Scan on albums al  (cost=0.00..19.70 rows=970 width=40) (actual time=0.004..0.004 rows=4 loops=1)
+        ->  Hash  (cost=21.30..21.30 rows=1130 width=40) (actual time=0.018..0.018 rows=5 loops=1)
+              Buckets: 2048  Batches: 1  Memory Usage: 17kB
+              ->  Seq Scan on artists a  (cost=0.00..21.30 rows=1130 width=40) (actual time=0.003..0.007 rows=5 loops=1)
+  ->  Hash  (cost=17.80..17.80 rows=780 width=68) (actual time=0.025..0.025 rows=4 loops=1)
+        Buckets: 1024  Batches: 1  Memory Usage: 9kB
+        ->  Seq Scan on persons p  (cost=0.00..17.80 rows=780 width=68) (actual time=0.011..0.014 rows=4 loops=1)
+Planning time: 0.625 ms
+Execution time: 0.251 ms
+
+CREATE INDEX al_artist_id_idx ON Albums(artist_id);
+
+EXPLAIN (ANALYZE) SELECT al.title, al.year, CONCAT(p.first_name, ' ', p.last_name) AS artist, a.pseudonym
+	FROM Artists a
+	INNER JOIN Albums al ON (al.artist_id = a.id)
+	INNER JOIN Persons p ON (p.id = a.person_id);
+
+Nested Loop  (cost=0.30..26.65 rows=4 width=132) (actual time=0.057..0.113 rows=3 loops=1)
+  ->  Nested Loop  (cost=0.15..25.76 rows=4 width=72) (actual time=0.033..0.059 rows=3 loops=1)
+        ->  Seq Scan on albums al  (cost=0.00..1.04 rows=4 width=40) (actual time=0.015..0.017 rows=4 loops=1)
+        ->  Index Scan using artists_pkey on artists a  (cost=0.15..6.17 rows=1 width=40) (actual time=0.007..0.007 rows=1 loops=4)
+              Index Cond: (id = al.artist_id)
+  ->  Index Scan using person_id on persons p  (cost=0.15..0.21 rows=1 width=68) (actual time=0.007..0.008 rows=1 loops=3)
+        Index Cond: (id = a.person_id)
+Planning time: 0.536 ms
+Execution time: 0.217 ms
 
 EXPLAIN SELECT * FROM Albums;
 
-Seq Scan on albums  (cost=0.00..19.70 rows=970 width=56)
+Seq Scan ON albums  (cost=0.00..19.70 rows=970 width=56)
 
 EXPLAIN (Analyze) SELECT * FROM Albums;
 
@@ -312,7 +347,7 @@ CREATE DATABASE Test;
 
 SELECT trunc(random()*21); --random() -случайное 0.0 < x < 1.0, trunc() - округление до целого;
 
-CREATE TABLE test_table (
+CREATE TABLE test_table2 (
   id SERIAL PRIMARY KEY,
   x INT,
   y INT,
@@ -345,7 +380,7 @@ BEGIN
         END LOOP;
         s1 := array_to_string(array1,'');
         s2 := array_to_string(array2,'');
-        INSERT INTO test_table(x, y, s1, s2) VALUES (x, y, s1, s2);
+        INSERT INTO test_table2(x, y, s1, s2) VALUES (x, y, s1, s2);
         array1 := '{NULL}';
         array2 := '{NULL}';
         s1 := ' ';
