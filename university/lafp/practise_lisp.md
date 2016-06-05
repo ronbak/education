@@ -159,7 +159,8 @@ x=(cons(s,t)) <=> car(x)=s & cdr(x)=t
 ====
 Задача:
 
-Дан числовой список. Вернуть его, убрав четные числа.
+Дан числовой список. Вернуть его, убрав четные числа. <br>
+Версия Риты.
 
 
 	(DEFUN dev (s)
@@ -171,6 +172,12 @@ x=(cons(s,t)) <=> car(x)=s & cdr(x)=t
 			)
 		)
 	)
+
+Версия Тимура.
+
+	(defun dev (s) (if (equal s nil) nil (
+ 	 if (equal (mod (car s) 2) 0) (dev (cdr s)) (cons (car s) (dev (cdr s))))))
+
 
 16.03 Задачи на структурные списки
 ====
@@ -428,6 +435,17 @@ LOOP</br>
 		)
 	)
 
+Версия Булата.
+
+	(DEFUN gapply (q w)
+	(SETQ lst '())
+	(DO ((count (LENGTH w) (- count 1)))
+	((= count 0) (RETURN lst))
+	(SETQ lst (APPEND lst (LIST (APPLY (CAR q) (CAR w))))) (SETQ w (CDR w)) (SETQ q (CDR q))
+	))
+
+>(gapply '(+ -) '((2 3 4)(2 3 4)))
+
 04.05
 ====
 Задача 1 (Из контрольной второй подгруппы)
@@ -439,84 +457,102 @@ LOOP</br>
 
 >(total '((1 2) (3 4)))
 
+Some Stuff
+====
 
-(set 'list '(1 2 3 4 5 6 7)) ; задание списка
+	(set 'list '(1 2 3 4 5 6 7)) ; задание списка
 
-(if (= (mod 4 2) 0) 'true 'false) ; проверка на четность
+	(if (= (mod 4 2) 0) 'true 'false) ; проверка на четность
 
-(defun fact (n) (if (= n 0) 1 (* n (fact (- n 1))))) ; вычисление факториала числа
-(defun gcd (m n) (if (= n 0) m (gcd n (mod m n)))) ; нахождение наибольшего общего делителя двух целых чисел
-(defun pow (m n) (if (= n 0) 1 (* m (pow m (- n 1))))) ; возведение m в степень n
-(defun count (s) (if (eq s nil) 0 (+ 1 (count (cdr s)))))
-(defun sum (s) (if (eq s nil) 0 (+ (car s) (sum (cdr s)))))
-(defun max1 (x) (IF (equal x nil) 0 (max (car x) (max1 (cdr x)))))
-(DEFUN LASTM (X) (IF (EQUAL (CDR X) NIL) X (LASTM (CDR X))))
-(defun dell (s) (if (equal (cdr s) nil) nil (cons (car s) (dell (cdr s)))))
-(defun lastitem (s) (if (equal (cdr s) nil) (car s) (lastitem (cdr s))))
-(defun append (s r) (cons (car s) r))
-(defun inverse (s) (if (equal s nil) nil (cons (lastitem s)) (inverse (dell s))))
-(cons 1 '(2 3)) = (1 2 3)
+	(defun fact (n) (if (= n 0) 1 (* n (fact (- n 1))))) ; вычисление факториала числа
+
+	(defun gcd (m n) (if (= n 0) m (gcd n (mod m n)))) ; нахождение наибольшего общего делителя двух целых чисел
+
+	(defun pow (m n) (if (= n 0) 1 (* m (pow m (- n 1))))) ; возведение m в степень n
+
+	(defun count (s) (if (eq s nil) 0 (+ 1 (count (cdr s)))))
+
+	(defun sum (s) (if (eq s nil) 0 (+ (car s) (sum (cdr s)))))
+
+	(defun max1 (x) (IF (equal x nil) 0 (max (car x) (max1 (cdr x)))))
+
+	(DEFUN LASTM (X) (IF (EQUAL (CDR X) NIL) X (LASTM (CDR X))))
+
+	(defun dell (s) (if (equal (cdr s) nil) nil (cons (car s) (dell (cdr s)))))
+
+	(defun lastitem (s) (if (equal (cdr s) nil) (car s) (lastitem (cdr s))))
+
+	(defun append (s r) (cons (car s) r))
+
+	(defun inverse (s) (if (equal s nil) nil (cons (lastitem s)) (inverse (dell s))))
+
+	(cons 1 '(2 3)) = (1 2 3)
 
 
-(backtrackable)
-Линейный список: список, элементы которого - атомы.
-Линейный: (a b c);
-Структурный: ((a b) c);
-; cond
-Задача линеаризации дерева:
-Снести все атомарные элементы на один уровень. Любая древовидная структура может быть представлена списком
-Из ( (a b) c (e f)) получить (a b c e f)
-Блок схема: ( defun lin (s) )
-If (s=nil)+ nil
-If (atom(car(s))) + cons(car(s)),lin(cdr(s)) - append(lin(car(s)), lin(cdr(s))
+Линейный список: список, элементы которого - атомы. <br>
+Линейный: (a b c); <br>
+Структурный: ((a b) c); <br>
 
-Lin(s)=append(lin('(a b)),lin('(c d)))=append('(a b), (c d))= (a b c d)
 
-Lin ('(c d)) = cons('c,lin((d))
-Lin((d))=cons (d, lin(nil))=cons(d,nil)
-Lun(nil)=nik
-Lin('(a b))=cons('a,lin('(b))=(a b)
-Lin('(b))=cons('b, lin(nil))=(b)
-Lin(nil)=nil
+Функции обработки списков
+---
+* ветвление
+---
 
-Функции обработки списков/
-1) ветвление
-(Cond (условие, действие) (условие, действие) (..,..))
-Пример: (cond (e q x y) 'ok (t 'fail))
-(If b p q) можно изобразить оператором cond((b p) (t q))
-2)присваивания
-(Setq ( var) (expr))
-(Set ( (expr) (expr))
-((setq x '(a b)))
-(SETQ X' (y a))
-(set (car x) 5)
+	(Cond (условие, действие) (условие, действие) (..,..))
 
- f:
- если первый эл-т nil
-  возвращаем nil
-  если остаток от деления первого эл-та на 2 равен 0
-    возвращаем f(список без первого эл-та)
-    возвращаем конкатенацию первый эл-т списка на f(остаток списка)
-КР1:
-(defun dev (s) (if (equal s nil) nil (
-  if (equal (mod (car s) 2) 0) (dev (cdr s)) (cons (car s) (dev (cdr s))))))
+* присваивания
+---
 
-  подсчитать количество атомов
-  подсчитать сумму всех чисел атомов
-  подсчитать числовые атомы
+	(Setq ( var) (expr))
+	(Set ( (expr) (expr))
+	((setq x '(a b)))
+	(SETQ X' (y a))
+	(set (car x) 5)
 
-КР3:
-  (DEFUN gapply (q w)
-  (SETQ lst '())
-  (DO ((count (LENGTH w) (- count 1)))
-  ((= count 0) (RETURN lst))
-  (SETQ lst (APPEND lst (LIST (APPLY (CAR q) (CAR w))))) (SETQ w (CDR w)) (SETQ q (CDR q))
-  ))
+Циклы
+===
+Loop  
+---
+	(setq a 4)
+>4
 
-  (gapply '(+ -) '((2 3 4)(2 3 4)))
+	(loop 
+	(setq a (+ a 1))
+	(when (> a 7) (return a)))
+>8
 
-  (setq sum 0)
-  (do
-  ( ( i 1 (+ i 1)))
-  ( (> i 10) sum)
-  (setq sum (+ sum i)))
+	(loop
+	(setq a (- a 1))
+	(when (< a 3) (return)))
+>NIL
+
+DO
+---
+	(do ((x 1 (+ x 1))
+	(y 1 (* y 2)))
+	((> x 5) y)
+	(print y)
+	(print 'working)
+	)
+>1
+
+>WORKING 
+
+>2
+
+>WORKING
+
+>4 
+
+>WORKING
+
+>8
+
+>WORKING 
+
+>16
+
+>WORKING
+
+>32
