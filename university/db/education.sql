@@ -532,9 +532,9 @@ SELECT * FROM students WHERE contacts ?& array['email','telephone','address','sk
 --таких студентов только трое
 id | name  |  surname  | sex | group_id |  town  |                                                                                contacts
 ----+-------+-----------+-----+----------+--------+-------------------------------------------------------------------------------------------------------------------------------------------------------------------------
- 3 | Илюза | Сакаева   | Ж   |        1 | Уфа    | {"email": "example2@mail.com", "skype": "iluzka95", "adress": "г.Казань, ул. Челюскина д.52, кв.177", "telephone": {"home": "5113362", "mobile": "890538"}}
- 4 | Захар | Макаров   | М   |        2 | Москва | {"email": "zahar@mail.com", "skype": "zahar95", "adress": "г.Москва, ул. Подлужная д.2, кв.77", "telephone": {"mobile": "890538333"}}
- 5 | Алина | Васильева | Ж   |        5 | Казань | {"email": "alina@mail.com", "skype": "alinka995", "adress": "г.Набережные Челны, ул. Роскольникова д.87, кв.3", "telephone": {"home": "633245", "mobile": "890538333"}}
+ 3 | Илюза | Сакаева   | Ж   |        1 | Уфа    | {"email": "example2@mail.com", "skype": "iluzka95", "address": "г.Казань, ул. Челюскина д.52, кв.177", "telephone": {"home": "5113362", "mobile": "890538"}}
+ 4 | Захар | Макаров   | М   |        2 | Москва | {"email": "zahar@mail.com", "skype": "zahar95", "address": "г.Москва, ул. Подлужная д.2, кв.77", "telephone": {"mobile": "890538333"}}
+ 5 | Алина | Васильева | Ж   |        5 | Казань | {"email": "alina@mail.com", "skype": "alinka995", "address": "г.Набережные Челны, ул. Роскольникова д.87, кв.3", "telephone": {"home": "633245", "mobile": "890538333"}}
 (3 rows)
 
 -- допустим нам понадобиться отправить данные первых трех студентов, чтобы корректно получить всю имеющуюся информацию
@@ -549,9 +549,9 @@ students
 -----------------------------------------------------------------------------------------------
 [{"name":"Гульнара","surname":"Нигматзянова","contacts":{"email": "example@mail.com", "telephone":
 {"home": "5113360", "mobile": "890531"}}},{"name":"Эмиль","surname":"Атажанов",
-"contacts":{"email": "example2@mail.com", "adress": "г.Казань, ул. Челюскина д.48, кв.147",
+"contacts":{"email": "example2@mail.com", "address": "г.Казань, ул. Челюскина д.48, кв.147",
 "telephone": {"home": "5113361", "mobile": "890531"}}},{"name":"Илюза","surname":"Сакаева",
-"contacts":{"email": "example2@mail.com", "skype": "iluzka95", "adress": "г.Казань, ул. Челюскина д.52, кв.177",
+"contacts":{"email": "example2@mail.com", "skype": "iluzka95", "address": "г.Казань, ул. Челюскина д.52, кв.177",
 "telephone": {"home": "5113362", "mobile": "890538"}}}]
 (1 row)
 
@@ -566,8 +566,8 @@ FROM (
    students
 -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 {"name":"Гульнара","surname":"Нигматзянова","contacts":{"email": "example@mail.com", "telephone": {"home": "5113360", "mobile": "890531"}}}
-{"name":"Эмиль","surname":"Атажанов","contacts":{"email": "example2@mail.com", "adress": "г.Казань, ул. Челюскина д.48, кв.147", "telephone": {"home": "5113361", "mobile": "890531"}}}
-{"name":"Илюза","surname":"Сакаева","contacts":{"email": "example2@mail.com", "skype": "iluzka95", "adress": "г.Казань, ул. Челюскина д.52, кв.177", "telephone": {"home": "5113362", "mobile": "890538"}}}
+{"name":"Эмиль","surname":"Атажанов","contacts":{"email": "example2@mail.com", "address": "г.Казань, ул. Челюскина д.48, кв.147", "telephone": {"home": "5113361", "mobile": "890531"}}}
+{"name":"Илюза","surname":"Сакаева","contacts":{"email": "example2@mail.com", "skype": "iluzka95", "address": "г.Казань, ул. Челюскина д.52, кв.177", "telephone": {"home": "5113362", "mobile": "890538"}}}
 (3 rows)
 
 --запросим контактные данные самого первого студента в виде таблицы ключ, значение
